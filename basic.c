@@ -185,8 +185,12 @@ static int32_t eval_primary() {
             int32_t address = eval_expression();
             if (token_pos < token_count && tokens[token_pos].type == TOK_RPAREN) {
                 token_pos++;
+            } else {
+                printf("Syntax error: expected ) in PEEK\n");
             }
             return memory_read((uint16_t)address);
+        } else {
+            printf("Syntax error: expected ( after PEEK\n");
         }
         return 0;
     } else if (tok->type == TOK_LPAREN) {

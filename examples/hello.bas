@@ -1,0 +1,3 @@
+5 FOR I = 1 to 10
+10 PRINT "HELLO, CLINT!"
+20 NEXT I

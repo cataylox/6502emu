@@ -1,0 +1,4 @@
+# Build artifacts
+*.o
+6502emu
+6502basic

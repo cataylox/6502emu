@@ -68,7 +68,7 @@ int load_binary_file(const char *filename, uint16_t offset) {
     }
     
     // Check if file fits in memory at given offset
-    if (offset + size > 0x10000) {
+    if ((uint32_t)offset + (uint32_t)size > 0x10000) {
         fprintf(stderr, "Error: File size (%ld bytes) at offset 0x%04X exceeds memory bounds\n", 
                 size, offset);
         fclose(f);
@@ -83,7 +83,7 @@ int load_binary_file(const char *filename, uint16_t offset) {
             fclose(f);
             return 0;
         }
-        memory_write(offset + i, (uint8_t)byte);
+        memory_write((uint16_t)(offset + i), (uint8_t)byte);
     }
     
     fclose(f);

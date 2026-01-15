@@ -15,9 +15,10 @@ A simple 6502 CPU emulator with a Microsoft-style BASIC interpreter written in C
 - Microsoft 6502 BASIC compatible syntax
 - Variables (A-Z, single letter)
 - Arithmetic expressions (+, -, *, /, parentheses)
-- Commands: PRINT, LET, INPUT, GOTO, IF/THEN, FOR/NEXT, REM, END
+- Commands: PRINT, LET, INPUT, GOTO, IF/THEN, FOR/NEXT, REM, END, PEEK, POKE
 - Relational operators: =, <, >, <=, >=, <>
 - String literals in PRINT statements
+- Memory access with PEEK and POKE
 
 ## Building
 
@@ -80,6 +81,14 @@ Or directly:
 
 - `END` - End program
 
+- `PEEK` - Read byte from memory
+  - `PEEK(address)` - Returns byte value (0-255) at memory address (0-65535)
+  - `LET A = PEEK(1000)` - Read from address 1000
+
+- `POKE` - Write byte to memory
+  - `POKE address, value` - Write byte value to address
+  - `POKE 1000, 42` - Write 42 to address 1000
+
 ### Example Programs
 
 ```basic
@@ -99,6 +108,14 @@ Or directly:
 20 LET B = A * 2
 30 PRINT "Double is: "; B
 40 END
+```
+
+```basic
+10 REM PEEK and POKE example
+20 POKE 1000, 42
+30 LET A = PEEK(1000)
+40 PRINT "Value at address 1000: "; A
+50 END
 ```
 
 ## Architecture

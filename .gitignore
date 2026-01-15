@@ -1,0 +1,7 @@
+# Build artifacts
+*.o
+6502emu
+6502basic
+
+# CodeQL
+_codeql_detected_source_root

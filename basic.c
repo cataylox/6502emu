@@ -177,6 +177,22 @@ static int32_t eval_primary() {
     } else if (tok->type == TOK_VARIABLE) {
         token_pos++;
         return variables[tok->value];
+    } else if (tok->type == TOK_UNKNOWN && strcmp(tok->str, "PEEK") == 0) {
+        // PEEK function
+        token_pos++;
+        if (token_pos < token_count && tokens[token_pos].type == TOK_LPAREN) {
+            token_pos++;
+            int32_t address = eval_expression();
+            if (token_pos < token_count && tokens[token_pos].type == TOK_RPAREN) {
+                token_pos++;
+            } else {
+                printf("Syntax error: expected ) in PEEK\n");
+            }
+            return memory_read((uint16_t)address);
+        } else {
+            printf("Syntax error: expected ( after PEEK\n");
+        }
+        return 0;
     } else if (tok->type == TOK_LPAREN) {
         token_pos++;
         int32_t val = eval_expression();
@@ -423,6 +439,21 @@ static void exec_next() {
     }
 }
 
+static void exec_poke() {
+    // POKE address, value
+    int32_t address = eval_expression();
+    
+    if (token_pos >= token_count || tokens[token_pos].type != TOK_COMMA) {
+        printf("Syntax error: expected comma in POKE\n");
+        return;
+    }
+    token_pos++;
+    
+    int32_t value = eval_expression();
+    
+    memory_write((uint16_t)address, (uint8_t)value);
+}
+
 static void execute_line(const char *line) {
     tokenize(line);
     token_pos = 0;
@@ -446,6 +477,8 @@ static void execute_line(const char *line) {
                 exec_for();
             } else if (strcmp(cmd, "NEXT") == 0) {
                 exec_next();
+            } else if (strcmp(cmd, "POKE") == 0) {
+                exec_poke();
             } else if (strcmp(cmd, "END") == 0) {
                 current_line = program_size;
                 return;
